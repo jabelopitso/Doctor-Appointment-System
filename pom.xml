@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.jabelopitso</groupId>
@@ -13,16 +14,172 @@
     <name>Doctor Appointment Booking System</name>
     <description>A Java OOP-based console application for managing medical appointments.</description>
 
+    <!-- ─────────────────────────────────────────────────────────────────────
+         DEVELOPER INFO
+         ───────────────────────────────────────────────────────────────────── -->
+    <developers>
+        <developer>
+            <name>Jabelo Pitso</name>
+            <roles>
+                <role>Software Developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <!-- ─────────────────────────────────────────────────────────────────────
+         GLOBAL PROPERTIES
+         ───────────────────────────────────────────────────────────────────── -->
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Dependency versions — update here to upgrade everywhere -->
+        <junit.version>5.10.0</junit.version>
+        <mysql.version>8.0.33</mysql.version>
+        <javafx.version>21</javafx.version>
+        <javamail.version>2.0.1</javamail.version>
+        <twilio.version>9.3.0</twilio.version>
+        <opencsv.version>5.8</opencsv.version>
+        <hikari.version>5.0.1</hikari.version>
     </properties>
 
+    <!-- ─────────────────────────────────────────────────────────────────────
+         DEPENDENCIES
+         ───────────────────────────────────────────────────────────────────── -->
+    <dependencies>
+
+        <!-- ── CURRENT: In use now ──────────────────────────────────────── -->
+
+        <!-- No external dependencies needed for current console app -->
+        <!-- All features use Java standard library only             -->
+
+
+        <!-- ── FUTURE: Unit Testing (JUnit 5) ──────────────────────────── -->
+        <!--
+             Used in: future-improvements/unit-tests/
+             Activate by removing the comment tags when ready
+        -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <!-- ── FUTURE: MySQL Database Integration ───────────────────────── -->
+        <!--
+             Used in: future-improvements/mysql-integration/
+             Requires: MySQL server running locally
+             Activate by removing the comment tags when ready
+        -->
+        <!--
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+        -->
+
+        <!-- ── FUTURE: HikariCP Connection Pool (goes with MySQL) ────────── -->
+        <!--
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikari.version}</version>
+        </dependency>
+        -->
+
+
+        <!-- ── FUTURE: CSV File Persistence ─────────────────────────────── -->
+        <!--
+             Used in: future-improvements/csv-persistence/
+             Activate by removing the comment tags when ready
+        -->
+        <!--
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${opencsv.version}</version>
+        </dependency>
+        -->
+
+
+        <!-- ── FUTURE: JavaFX GUI Interface ──────────────────────────────── -->
+        <!--
+             Used in: future-improvements/gui-interface/
+             Requires: JavaFX SDK installed
+             Activate by removing the comment tags when ready
+        -->
+        <!--
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        -->
+
+
+        <!-- ── FUTURE: Email Notifications (JavaMail) ────────────────────── -->
+        <!--
+             Used in: future-improvements/email-sms-notifications/
+             Activate by removing the comment tags when ready
+        -->
+        <!--
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>${javamail.version}</version>
+        </dependency>
+        -->
+
+
+        <!-- ── FUTURE: SMS Notifications (Twilio) ────────────────────────── -->
+        <!--
+             Used in: future-improvements/email-sms-notifications/
+             Requires: Twilio account + API key
+             Activate by removing the comment tags when ready
+        -->
+        <!--
+        <dependency>
+            <groupId>com.twilio.sdk</groupId>
+            <artifactId>twilio</artifactId>
+            <version>${twilio.version}</version>
+        </dependency>
+        -->
+
+    </dependencies>
+
+    <!-- ─────────────────────────────────────────────────────────────────────
+         BUILD CONFIGURATION
+         ───────────────────────────────────────────────────────────────────── -->
     <build>
+
+        <!-- Source folders — Maven will compile all packages under src/ -->
         <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>src/test</testSourceDirectory>
+
         <plugins>
-            <!-- Compile plugin -->
+
+            <!-- ── Compiler Plugin ──────────────────────────────────────── -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -30,10 +187,11 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
 
-            <!-- Package into runnable JAR -->
+            <!-- ── Runnable JAR Plugin ──────────────────────────────────── -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -47,6 +205,29 @@
                     <outputDirectory>${project.basedir}/out</outputDirectory>
                 </configuration>
             </plugin>
+
+            <!-- ── JUnit 5 Test Runner ──────────────────────────────────── -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                </configuration>
+            </plugin>
+
+            <!-- ── JavaFX Plugin (activate when building GUI) ───────────── -->
+            <!--
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>main.Main</mainClass>
+                </configuration>
+            </plugin>
+            -->
+
         </plugins>
     </build>
 
