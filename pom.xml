@@ -6,6 +6,9 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- ─────────────────────────────────────────────────────────────────────
+         PROJECT INFO
+         ───────────────────────────────────────────────────────────────────── -->
     <groupId>com.jabelopitso</groupId>
     <artifactId>doctor-appointment-system</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -14,15 +17,10 @@
     <name>Doctor Appointment Booking System</name>
     <description>A Java OOP-based console application for managing medical appointments.</description>
 
-    <!-- ─────────────────────────────────────────────────────────────────────
-         DEVELOPER INFO
-         ───────────────────────────────────────────────────────────────────── -->
     <developers>
         <developer>
             <name>Jabelo Pitso</name>
-            <roles>
-                <role>Software Developer</role>
-            </roles>
+            <roles><role>Software Developer</role></roles>
         </developer>
     </developers>
 
@@ -34,7 +32,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- Dependency versions — update here to upgrade everywhere -->
+        <!-- Dependency versions — change here to upgrade everywhere -->
         <junit.version>5.10.0</junit.version>
         <mysql.version>8.0.33</mysql.version>
         <javafx.version>21</javafx.version>
@@ -49,17 +47,7 @@
          ───────────────────────────────────────────────────────────────────── -->
     <dependencies>
 
-        <!-- ── CURRENT: In use now ──────────────────────────────────────── -->
-
-        <!-- No external dependencies needed for current console app -->
-        <!-- All features use Java standard library only             -->
-
-
-        <!-- ── FUTURE: Unit Testing (JUnit 5) ──────────────────────────── -->
-        <!--
-             Used in: future-improvements/unit-tests/
-             Activate by removing the comment tags when ready
-        -->
+        <!-- ── ACTIVE: JUnit 5 Unit Testing ─────────────────────────────── -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -79,23 +67,13 @@
             <scope>test</scope>
         </dependency>
 
-
-        <!-- ── FUTURE: MySQL Database Integration ───────────────────────── -->
-        <!--
-             Used in: future-improvements/mysql-integration/
-             Requires: MySQL server running locally
-             Activate by removing the comment tags when ready
-        -->
+        <!-- ── FUTURE: MySQL + HikariCP Connection Pool ──────────────────── -->
         <!--
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
         </dependency>
-        -->
-
-        <!-- ── FUTURE: HikariCP Connection Pool (goes with MySQL) ────────── -->
-        <!--
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
@@ -103,12 +81,7 @@
         </dependency>
         -->
 
-
         <!-- ── FUTURE: CSV File Persistence ─────────────────────────────── -->
-        <!--
-             Used in: future-improvements/csv-persistence/
-             Activate by removing the comment tags when ready
-        -->
         <!--
         <dependency>
             <groupId>com.opencsv</groupId>
@@ -117,13 +90,7 @@
         </dependency>
         -->
 
-
-        <!-- ── FUTURE: JavaFX GUI Interface ──────────────────────────────── -->
-        <!--
-             Used in: future-improvements/gui-interface/
-             Requires: JavaFX SDK installed
-             Activate by removing the comment tags when ready
-        -->
+        <!-- ── FUTURE: JavaFX GUI ────────────────────────────────────────── -->
         <!--
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -137,12 +104,7 @@
         </dependency>
         -->
 
-
-        <!-- ── FUTURE: Email Notifications (JavaMail) ────────────────────── -->
-        <!--
-             Used in: future-improvements/email-sms-notifications/
-             Activate by removing the comment tags when ready
-        -->
+        <!-- ── FUTURE: Email Notifications ──────────────────────────────── -->
         <!--
         <dependency>
             <groupId>com.sun.mail</groupId>
@@ -151,13 +113,7 @@
         </dependency>
         -->
 
-
         <!-- ── FUTURE: SMS Notifications (Twilio) ────────────────────────── -->
-        <!--
-             Used in: future-improvements/email-sms-notifications/
-             Requires: Twilio account + API key
-             Activate by removing the comment tags when ready
-        -->
         <!--
         <dependency>
             <groupId>com.twilio.sdk</groupId>
@@ -173,13 +129,50 @@
          ───────────────────────────────────────────────────────────────────── -->
     <build>
 
-        <!-- Source folders — Maven will compile all packages under src/ -->
-        <sourceDirectory>src</sourceDirectory>
-        <testSourceDirectory>src/test</testSourceDirectory>
+        <!-- Tests live in src/test -->
+        <testSourceDirectory>${project.basedir}/src/test</testSourceDirectory>
 
         <plugins>
 
-            <!-- ── Compiler Plugin ──────────────────────────────────────── -->
+            <!-- ── Build Helper: registers all src/* folders as source roots -->
+            <!-- This is required because Maven only supports one sourceDirectory  -->
+            <!-- by default, but our project is split across model/service/util/main -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/model</source>
+                                <source>${project.basedir}/src/service</source>
+                                <source>${project.basedir}/src/util</source>
+                                <source>${project.basedir}/src/main</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-test-source</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/test</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- ── Compiler Plugin ───────────────────────────────────────── -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -191,7 +184,7 @@
                 </configuration>
             </plugin>
 
-            <!-- ── Runnable JAR Plugin ──────────────────────────────────── -->
+            <!-- ── Runnable JAR ──────────────────────────────────────────── -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -206,7 +199,7 @@
                 </configuration>
             </plugin>
 
-            <!-- ── JUnit 5 Test Runner ──────────────────────────────────── -->
+            <!-- ── JUnit 5 Test Runner ───────────────────────────────────── -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -216,7 +209,7 @@
                 </configuration>
             </plugin>
 
-            <!-- ── JavaFX Plugin (activate when building GUI) ───────────── -->
+            <!-- ── FUTURE: JavaFX Plugin ─────────────────────────────────── -->
             <!--
             <plugin>
                 <groupId>org.openjfx</groupId>

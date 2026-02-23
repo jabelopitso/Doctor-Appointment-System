@@ -1,0 +1,3 @@
+service/PatientServiceTest.class
+service/DoctorServiceTest.class
+service/AppointmentServiceTest.class

@@ -3,6 +3,7 @@ package service;
 import model.Appointment;
 import model.Doctor;
 import model.Patient;
+import util.DateValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +18,25 @@ public class AppointmentService {
     }
 
     public Appointment book(Patient patient, Doctor doctor, String slot, String reason) {
+
+        // 1. Validate slot is not in the past
+        if (!DateValidator.isValid(slot)) {
+            return null;
+        }
+
+        // 2. Doctor must have this slot open
         if (!doctor.isSlotAvailable(slot)) {
             System.out.println("\n  ERROR: Dr. " + doctor.getName() + " is not available at " + slot);
             return null;
         }
+
+        // 3. Patient must not already have appointment at same time
         if (manager.patientHasConflict(patient.getId(), slot)) {
             System.out.println("\n  ERROR: You already have an appointment at " + slot);
             return null;
         }
+
+        // 4. All checks passed — create appointment
         Appointment appt = manager.createAppointment(patient, doctor, slot, reason);
         doctor.removeSlot(slot);
         patient.addAppointmentId(appt.getId());

@@ -7,6 +7,7 @@ import service.AppointmentManager;
 import service.AppointmentService;
 import service.DoctorService;
 import service.PatientService;
+import util.DateValidator;
 
 import java.util.List;
 import java.util.Optional;
@@ -197,10 +198,14 @@ public class Main {
 
     private static void addDoctorSlot() {
         System.out.println("\n  --- ADD SLOT -----------------------------------");
-        System.out.println("  Format: YYYY-MM-DD HH:mm  (e.g. 2024-07-15 10:00)");
+        System.out.println("  Format: YYYY-MM-DD HH:mm  (e.g. 2025-07-15 10:00)");
         System.out.print("  New slot : ");
         String slot = input();
         if (slot.isEmpty()) { System.out.println("  ERROR: Slot cannot be empty."); return; }
+
+        // Validate format only — doctors can add future prep slots
+        if (!DateValidator.isValidFormat(slot)) return;
+
         currentDoctor.addAvailableSlot(slot);
         doctorService.saveDoctors();
         System.out.println("  SUCCESS: Slot '" + slot + "' added and saved.");
